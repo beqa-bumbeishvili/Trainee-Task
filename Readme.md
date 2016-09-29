@@ -1,0 +1,1 @@
+Trainee task - a simple html game 
