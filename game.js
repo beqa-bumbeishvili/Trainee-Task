@@ -6,14 +6,15 @@ window.onload = function startGame() {
     playground.start();
     square = new setValues(30, 30, "red", 10, 130);
     obstacle = new setValues(10, 115, "green", 500, 120);
-    //obstacleArray.push(obstacle);
 }
 
 var playground = {
     canvas: document.getElementById("myCanvas"),
     start: function () {
         this.context = this.canvas.getContext("2d");
-        this.frameNo = 0;
+        this.scoreCounter = 0;
+        this.frameCounter = 0;
+        this.scoreCounter = 0;
         this.interval = setInterval(update, 30);
         window.addEventListener("keydown", function (event) {
             switch (event.keyCode) {
@@ -45,7 +46,7 @@ var playground = {
 }
 
 function everyinterval(n) {
-    if ((playground.frameNo / n) % 1 == 0) { return true; }
+    if ((playground.frameCounter / n) % 1 == 0) { return true; }
     return false;
 }
 
@@ -54,10 +55,16 @@ function setValues(w, h, color, co_x, co_y) {
     this.height = h;
     this.x = co_x;
     this.y = co_y;
+    ctx = playground.context;
     this.fill = function () {
-        ctx = playground.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+    this.score = function () {
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText("Your score:", 290, 25);
+        ctx.fillText(playground.scoreCounter, 450, 25);
     }
     this.horizontalStep = 0;
     this.verticalStep = 0;
@@ -81,9 +88,12 @@ function update() {
     }
 
     playground.clear();
-    playground.frameNo += 1;
-    var x, y;
-    if (playground.frameNo == 1 || everyinterval(50)) {
+    playground.frameCounter += 1;
+    if (playground.frameCounter > 50 && everyinterval(50) == true) {
+        playground.scoreCounter += 10;
+    }
+    var x;
+    if (playground.frameCounter == 1 || everyinterval(50) == true) {
         x = playground.canvas.height;
         minHeight = 50;
         maxHeight = 115;
@@ -100,6 +110,7 @@ function update() {
     for (i = 0; i < obstacleArray.length; i++) {
         obstacleArray[i].x -= 4;
         obstacleArray[i].fill();
+        obstacleArray[i].score();
     }
 }
 
