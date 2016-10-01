@@ -84,6 +84,7 @@ function update() {
     for (var i = 0; i < obstacleArray.length; i++) {
         if (square.crash(obstacleArray[i])) {
             playground.gameOver();
+            swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "Got it" });
         }
     }
 
