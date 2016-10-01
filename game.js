@@ -1,11 +1,16 @@
 var square;
+var squareSpeed = 4;
 var obstacle;
 var obstacleArray = [];
+var obstacleSpeed = 4;
+var sound;
 
-window.onload = function startGame() {
+function startGame() {
     playground.start();
-    square = new setValues(30, 30, "red", 10, 130);
+    square = new setValues(30, 30, "images/dinosaur.png", 10, 130);
     obstacle = new setValues(10, 115, "green", 500, 120);
+    sound = new Audio("sounds/mario_soundtrack.mp3");
+    sound.play();
 }
 
 var playground = {
@@ -19,19 +24,19 @@ var playground = {
         window.addEventListener("keydown", function (event) {
             switch (event.keyCode) {
                 case 37:
-                    square.horizontalStep -= 4;
+                    square.horizontalStep -= squareSpeed;
                     square.makeStep();
                     break;
                 case 38:
-                    square.verticalStep -= 4;
+                    square.verticalStep -= squareSpeed;
                     square.makeStep();
                     break;
                 case 39:
-                    square.horizontalStep += 4;
+                    square.horizontalStep += squareSpeed;
                     square.makeStep();
                     break;
                 case 40:
-                    square.verticalStep += 4;
+                    square.verticalStep += squareSpeed;
                     square.makeStep();
                     break;
             }
@@ -45,20 +50,42 @@ var playground = {
     }
 }
 
+function stopMusicPlay() {
+    if (!sound.paused) {
+        sound.pause();
+    }
+    else sound.play();
+}
+
+function changeSquare() {
+    square = new setValues(30, 30, "images/flappybird.png", square.x, square.y);
+}
+
 function everyinterval(n) {
     if ((playground.frameCounter / n) % 1 == 0) { return true; }
     return false;
 }
 
-function setValues(w, h, color, co_x, co_y) {
+function setValues(w, h, background, co_x, co_y) {
     this.width = w;
     this.height = h;
     this.x = co_x;
     this.y = co_y;
+    var isImage = false;
+    if (background.includes(".")) {
+        isImage = true;
+        this.image = new Image();
+        this.image.src = background;
+    }
     ctx = playground.context;
     this.fill = function () {
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        if (isImage) {
+            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        }
+        else {
+            ctx.fillStyle = background;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
     }
     this.score = function () {
         ctx.font = "30px Arial";
@@ -84,14 +111,17 @@ function update() {
     for (var i = 0; i < obstacleArray.length; i++) {
         if (square.crash(obstacleArray[i])) {
             playground.gameOver();
-            swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "Got it" });
+            sound.pause();
+            swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "Got it" }, function () {
+                location.reload();
+            });
         }
     }
 
     playground.clear();
     playground.frameCounter += 1;
     if (playground.frameCounter > 50 && everyinterval(50) == true) {
-        playground.scoreCounter += 10;
+        playground.scoreCounter += 10; 
     }
     var x;
     if (playground.frameCounter == 1 || everyinterval(50) == true) {
@@ -109,7 +139,7 @@ function update() {
     square.verticalStep = 0;
     square.fill();
     for (i = 0; i < obstacleArray.length; i++) {
-        obstacleArray[i].x -= 4;
+        obstacleArray[i].x -= obstacleSpeed + Math.floor((playground.scoreCounter/50));
         obstacleArray[i].fill();
         obstacleArray[i].score();
     }
