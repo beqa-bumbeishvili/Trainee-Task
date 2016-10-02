@@ -19,7 +19,6 @@ var playground = {
     canvas: document.getElementById("myCanvas"),
     start: function () {
         this.context = this.canvas.getContext("2d");
-        this.scoreCounter = 0;
         this.frameCounter = 0;
         this.scoreCounter = 0;
         this.interval = setInterval(update, 30);
@@ -150,14 +149,10 @@ function update() {
     var x;
     if (playground.frameCounter == 1 || obstacleDest(obstacleRepeat) == true) {
         x = playground.canvas.height;
-        minHeight = 50;
-        maxHeight = 115;
-        height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight); //50-115
-        minGap = 50;
-        maxGap = 100;
-        gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap); //50-200
-        obstacleArray.push(new setValues(10, height, "green", 500, 0));
-        obstacleArray.push(new setValues(10, x - (height + gap), "green", 500, height + gap));
+        obstacleHeight = Math.floor(Math.random() * (115 - 50 + 1) + 50); //rand between 50-115
+        distance = Math.floor(Math.random() * (100 - 50 + 1) + 50); //rand between 50-100
+        obstacleArray.push(new setValues(10, obstacleHeight, "green", 500, 0));
+        obstacleArray.push(new setValues(10, x - (obstacleHeight + distance), "green", 500, obstacleHeight + distance));
     }
     square.horizontalStep = 0;
     square.verticalStep = 0;

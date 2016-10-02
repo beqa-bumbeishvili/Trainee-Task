@@ -1,4 +1,38 @@
+#canvasContainer {
+    margin-left: 300px;
+    margin-top: 20px;
+}
+
 #myCanvas {
     border: 3px solid #d3d3d3;
-    background:url("images/background.png") ;
+    background: url("images/background.png");
+}
+
+#startBtnContainer {
+    position: absolute;
+    left: 640px;
+}
+
+#stopMusicBtnContainer {
+    position: absolute;
+    left: 412px;
+}
+
+#squareBtnContainer {
+    position: absolute;
+    left: 798px;
+}
+
+#rulesContainer {
+    margin-top: 70px;
+    margin-left: 300px;
+    width: 500px;
+}
+
+#rules {
+    margin-top:50px;
+}
+
+#rulesBtn {
+width:100%;
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="sweetalert/sweetalert.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="image/png" href="http://www.favicon.cc/logo3d/473483.png" />
+    <title>trainee task</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="sweetalert/sweetalert.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="canvasContainer">
+            <canvas id="myCanvas" width="500" height="280">
+                Go get chrome!...
+            </canvas>
+            <br />
+            <div id="startBtnContainer">
+                <input type="button" class="btn btn-info" id="startBtn" onclick="startGame()" value="start" />
+            </div>
+            <div id="stopMusicBtnContainer">
+                <input type="button" class="btn btn-info" id="musicBtn" onclick="stopMusicPlay()" value="turn on/off music" />
+            </div>
+            <div id="squareBtnContainer">
+                <input type="button" class="btn btn-info" id="squareBtn" onclick="changeSquare()" value="change square" />
+            </div>
+        </div>
+        <div id="rulesContainer">
+            <div id="rules" class="collapse">
+                <ul class="list-group">
+                    <li class="list-group-item">press start to play a game.</li>
+                    <li class="list-group-item">you can control sound by clicking left button.</li>
+                    <li class="list-group-item">control square shape with right button.</li>
+                    <li class="list-group-item"> game speed increases every obstacle you pass.</li>
+                    <li class="list-group-item"> my highest score is 340 :)</li>
+                </ul>
+            </div>
+            <button id="rulesBtn" data-toggle="collapse" class="btn btn-default" data-target="#rules">rules</button>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="game.js"></script>
+</body>
+</html>
+
