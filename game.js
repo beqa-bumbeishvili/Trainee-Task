@@ -5,6 +5,7 @@ var obstacleArray = [];
 var obstacleSpeed = 4;
 var obstacleRepeat = 50;
 var sound;
+var highscore = 340;
 
 function startGame() {
     playground.start();
@@ -129,12 +130,18 @@ function update() {
         if (square.crash(obstacleArray[i])) {
             playground.gameOver();
             sound.pause();
-            swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "OK" }, function () {
-                location.reload();
-            });
+            if (checkIfHighScore(playground.scoreCounter) == true) {
+                swal({ title: "congratulations!", text: "you beat the high score!", type: "success" }, function () {
+                    location.reload();
+                });
+            }
+            else {
+                swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "OK" }, function () {
+                    location.reload();
+                });
+            }
         }
     }
-
     playground.clear();
     playground.frameCounter += 1;
     if (playground.frameCounter > 50 && obstacleDest(obstacleRepeat) == true) {
@@ -156,9 +163,18 @@ function update() {
     square.verticalStep = 0;
     square.fill();
     for (i = 0; i < obstacleArray.length; i++) {
-        obstacleArray[i].x -= obstacleSpeed + Math.floor((playground.scoreCounter/50));
+        obstacleArray[i].x -= obstacleSpeed + Math.floor((playground.scoreCounter / 50));
         obstacleArray[i].fill();
         obstacleArray[i].score();
     }
 }
 
+function checkIfHighScore(score) {
+    if (localStorage.getItem("highscore") == null)
+        localStorage.setItem("highscore", highscore);
+    if (score > localStorage.getItem("highscore")) {
+        localStorage.setItem("highscore",score);
+        return true;
+    }
+    return false;
+}
