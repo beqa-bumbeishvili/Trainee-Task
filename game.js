@@ -3,13 +3,14 @@ var squareSpeed = 4;
 var obstacle;
 var obstacleArray = [];
 var obstacleSpeed = 4;
+var obstacleRepeat = 50;
 var sound;
 
 function startGame() {
     playground.start();
-    square = new setValues(30, 30, "images/dinosaur.png", 10, 130);
+    square = new setValues(30, 30, "red", 10, 130);
     obstacle = new setValues(10, 115, "green", 500, 120);
-    sound = new Audio("sounds/mario_soundtrack.mp3");
+    sound = new Audio("sounds/soundtrack.mp3");
     sound.play();
 }
 
@@ -57,12 +58,8 @@ function stopMusicPlay() {
     else sound.play();
 }
 
-function changeSquare() {
-    square = new setValues(30, 30, "images/flappybird.png", square.x, square.y);
-}
-
-function everyinterval(n) {
-    if ((playground.frameCounter / n) % 1 == 0) { return true; }
+function obstacleDest(frame) {
+    if ((playground.frameCounter / frame) % 1 == 0) { return true; }
     return false;
 }
 
@@ -71,6 +68,7 @@ function setValues(w, h, background, co_x, co_y) {
     this.height = h;
     this.x = co_x;
     this.y = co_y;
+    this.squareStyle = background;
     var isImage = false;
     if (background.includes(".")) {
         isImage = true;
@@ -98,6 +96,10 @@ function setValues(w, h, background, co_x, co_y) {
     this.makeStep = function () {
         this.x += this.horizontalStep;
         this.y += this.verticalStep;
+        if (this.x < 0) this.x = 0;
+        if (this.x > 470) this.x = 470;
+        if (this.y < 0) this.y = 0;
+        if (this.y > 250) this.y = 250;
     }
     this.crash = function (obstacle) {  //check if square edge touches obstacle
         if (((this.y + this.height) < obstacle.y) || (this.y > (obstacle.y + obstacle.height)) || ((this.x + this.width) < obstacle.x) || (this.x > (obstacle.x + (obstacle.width)))) {
@@ -107,12 +109,27 @@ function setValues(w, h, background, co_x, co_y) {
     }
 }
 
+
+function getFileName(path) {
+    return path.replace(/^.*[\\\/]/, '');
+}
+
+function changeSquare() {
+    if (getFileName(square.squareStyle) == "red")
+        square = new setValues(30, 30, "images/flappy.png", square.x, square.y);
+    else if (getFileName(square.squareStyle) == "flappy.png")
+        square = new setValues(30, 30, "images/dino.png", square.x, square.y);
+    else square = new setValues(30, 30, "red", square.x, square.y);
+
+}
+
+
 function update() {
     for (var i = 0; i < obstacleArray.length; i++) {
         if (square.crash(obstacleArray[i])) {
             playground.gameOver();
             sound.pause();
-            swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "Got it" }, function () {
+            swal({ title: "crash!", text: "you hit the wall!", type: "error", confirmButtonText: "OK" }, function () {
                 location.reload();
             });
         }
@@ -120,11 +137,11 @@ function update() {
 
     playground.clear();
     playground.frameCounter += 1;
-    if (playground.frameCounter > 50 && everyinterval(50) == true) {
-        playground.scoreCounter += 10; 
+    if (playground.frameCounter > 50 && obstacleDest(obstacleRepeat) == true) {
+        playground.scoreCounter += 10;
     }
     var x;
-    if (playground.frameCounter == 1 || everyinterval(50) == true) {
+    if (playground.frameCounter == 1 || obstacleDest(obstacleRepeat) == true) {
         x = playground.canvas.height;
         minHeight = 50;
         maxHeight = 115;
